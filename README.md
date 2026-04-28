@@ -1,6 +1,6 @@
 # Ex.No:1a  			Study of Socket Programming
-# Name: Subashini K
-# Register number: 212225240160
+Name: Subashini K
+Register number: 212225240160
 ## Aim: 
 To perform a study on Socket Programming
 ## Introduction:
