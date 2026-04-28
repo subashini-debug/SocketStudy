@@ -57,60 +57,109 @@ Socket programming finds applications in various domains, including web developm
 ```
 1. Server Program (server.py)
 import socket
+import threading
+import time
 
-# Create socket
-server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+def server():
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.bind(("127.0.0.1", 5000))
+    s.listen(1)
 
-# Bind socket to IP and port
-host = '127.0.0.1'
-port = 12345
-server_socket.bind((host, port))
+    print("server waiting")
 
-# Listen for connections
-server_socket.listen(1)
-print("Server is waiting for connection...")
+    conn, addr = s.accept()
+    print("connected by :", addr)
 
-# Accept client connection
-conn, addr = server_socket.accept()
-print("Connected to:", addr)
+    # Conversation 1
+    data = conn.recv(1024)
+    print("client says:", data.decode())
+    conn.send("hello message received".encode())
 
-# Receive data from client
-data = conn.recv(1024).decode()
-print("Client says:", data)
+    # Conversation 2
+    data = conn.recv(1024)
+    print("client says:", data.decode())
+    conn.send("Saveetha Engineering College is located in Chennai".encode())
 
-# Send response to client
-message = "Hello Client, message received!"
-conn.send(message.encode())
+    # Conversation 3
+    data = conn.recv(1024)
+    print("client says:", data.decode())
+    conn.send("It offers various engineering courses".encode())
 
-# Close connection
-conn.close()
-server_socket.close()
-2. Client Program (client.py)
-import socket
+    # Conversation 4
+    data = conn.recv(1024)
+    print("client says:", data.decode())
+    conn.send("The college has good infrastructure".encode())
 
-# Create socket
-client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    # Conversation 5
+    data = conn.recv(1024)
+    print("client says:", data.decode())
+    conn.send("Many students participate in technical events".encode())
 
-# Connect to server
-host = '127.0.0.1'
-port = 12345
-client_socket.connect((host, port))
+    # Conversation 6
+    data = conn.recv(1024)
+    print("client says:", data.decode())
+    conn.send("The campus also encourages research activities".encode())
 
-# Send message to server
-message = "Hello Server!"
-client_socket.send(message.encode())
+    # Final message
+    data = conn.recv(1024)
+    print("client says:", data.decode())
+    conn.send("process completed".encode())
 
-# Receive response from server
-data = client_socket.recv(1024).decode()
-print("Server says:", data)
+    conn.close()
+    s.close()
 
-# Close socket
-client_socket.close()
+
+def client():
+    time.sleep(1)
+
+    c = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    c.connect(("127.0.0.1", 5000))
+
+    # Conversation 1
+    c.send("Hello Server".encode())
+    print("Server says:", c.recv(1024).decode())
+
+    # Conversation 2
+    c.send("Tell me about Saveetha Engineering College".encode())
+    print("Server says:", c.recv(1024).decode())
+
+    # Conversation 3
+    c.send("What courses are available?".encode())
+    print("Server says:", c.recv(1024).decode())
+
+    # Conversation 4
+    c.send("How is the infrastructure?".encode())
+    print("Server says:", c.recv(1024).decode())
+
+    # Conversation 5
+    c.send("Do students attend events?".encode())
+    print("Server says:", c.recv(1024).decode())
+
+    # Conversation 6
+    c.send("Are research activities encouraged?".encode())
+    print("Server says:", c.recv(1024).decode())
+
+    # Final message
+    c.send("Thank you".encode())
+    print("Server says:", c.recv(1024).decode())
+
+    c.close()
+
+
+server_thread = threading.Thread(target=server)
+client_thread = threading.Thread(target=client)
+
+server_thread.start()
+client_thread.start()
+
+server_thread.join()
+client_thread.join()
 
 ```
 
 ## Output:
-  ![alt text](image.png)
+  
+![alt text](<Screenshot (296).png>)
 
 ## Result:
 Thus the study of Socket Programming Completed Successfully
